@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_login import LoginManager
 import boto3
+from pymongo import MongoClient
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -25,6 +26,11 @@ def load_user(user_id):
     # You can expand this to load user details from the database or Cognito
     # Here, we assume `user_id` is an email address for simplicity
     return User(user_id)
+
+# MongoDB Configuration
+app.config['MONGO_URI'] = "mongodb://localhost:27017/todo_app"
+mongo_client = MongoClient(app.config['MONGO_URI'])
+app.db = mongo_client.todo_app  # Access the database
 
 # Import routes after app is created (to avoid circular imports)
 from application.routes import main
